@@ -1,0 +1,5 @@
+{
+  "name": "SegregateRight",
+  "description": "Precision Waste Logic - AI-powered waste classification for a sustainable future.",
+  "requestFramePermissions": ["camera"]
+}
