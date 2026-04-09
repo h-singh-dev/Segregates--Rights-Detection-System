@@ -1,20 +1,43 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Segregates Rights-Detection-System ♻️
 
-# Run and deploy your AI Studio app
+An advanced, full-stack AI Waste Classification application designed to optimize recycling accuracy and environmental sustainability. 
 
-This contains everything you need to run your app locally.
+## Features
+- **Intelligent Classification:** Uses Google's Gemini-3 Flash AI via secure proxy to categorize waste into WET, DRY, or HAZARD bins.
+- **Multimodal Inputs:** Seamlessly analyzes items via text search, live webcam capture, or local image file uploads.
+- **Data Persistence:** Built-in `localStorage` saves your historical scans and automatically maps your environmental impact.
+- **Analytics Dashboard:** Visualizes your waste categorization trends dynamically using Recharts.
+- **Secure Prototype Authentication:** Shields the application with an aesthetic glassmorphic login barrier.
 
-View your app in AI Studio: https://ai.studio/apps/a142ea5f-44ad-4da2-b586-acde149818e7
+## Tech Stack
+- **Frontend:** React 19, Vite, Tailwind CSS v4, Framer Motion, TypeScript
+- **Backend:** Node.js, Express.js
+- **AI Integration:** `@google/genai` (Gemini API)
+- **Data Visualization:** Recharts
+- **Icons:** Lucide React
 
-## Run Locally
+## Local Development
+To run this application locally, you will need two terminals running simultaneously to serve the API proxy and the client interface.
 
-**Prerequisites:**  Node.js
+**1. Setup Environment Variables**
+Create a `.env` file in your root folder:
+```bash
+GEMINI_API_KEY="Your-Google-Gemini-Key-Here"
+APP_URL="http://localhost:3000"
+```
 
+**2. Start the Backend API (Terminal 1)**
+```bash
+npm run server
+```
+*(This launches the Express proxy on port 3001, protecting your AI key from the client bundle).*
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+**3. Start the Frontend (Terminal 2)**
+```bash
+npm run dev
+```
+
+Visit `http://localhost:3000` to interact with the prototype.
+
+## Security Overview
+This architecture ensures your `GEMINI_API_KEY` never leaks to the browser. All AI prompts are executed completely Server-Side in `server/classify.ts`, and the Vite proxy safely redirects frontend fetch calls.
