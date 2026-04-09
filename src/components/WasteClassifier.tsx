@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Search, Camera, QrCode, ArrowRight, Leaf, Recycle, AlertTriangle, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Camera, QrCode, ArrowRight, Leaf, Recycle, AlertTriangle, Loader2, AlertCircle, ImagePlus } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { classifyWasteByText, classifyWasteByImage } from '../services/geminiService';
 import { WasteResult, WasteCategory, ClassificationHistory } from '../types';
@@ -23,6 +23,7 @@ export default function WasteClassifier() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const saveToHistory = (item: WasteResult, imageUrl?: string) => {
     setHistory(prev => {
@@ -94,9 +95,35 @@ export default function WasteClassifier() {
           setError("Failed to identify item from image.");
         } finally {
           setLoading(false);
+          setShowCamera(false);
         }
       }
     }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64Image = event.target?.result as string;
+      setLoading(true);
+      setError(null);
+      setResult(null);
+      
+      try {
+        const data = await classifyWasteByImage(base64Image);
+        setResult(data);
+        saveToHistory(data, base64Image);
+      } catch (err) {
+        setError("Failed to identify item from uploaded image.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // Reset input so same file can be uploaded again
   };
 
   const getCategoryColor = (category: WasteCategory) => {
@@ -161,6 +188,22 @@ export default function WasteClassifier() {
               >
                 <Camera size={24} />
               </button>
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="p-4 bg-surface-container-highest text-on-surface rounded-lg hover:bg-surface-bright transition-all"
+                title="Upload Image"
+              >
+                <ImagePlus size={24} />
+              </button>
+              <input 
+                type="file" 
+                accept="image/*" 
+                ref={fileInputRef} 
+                onChange={handleFileUpload} 
+                className="hidden" 
+              />
 
               <button
                 type="submit"

@@ -1,4 +1,4 @@
-import { Aperture, BarChart3, History, BookOpen, User } from "lucide-react";
+import { Aperture, BarChart3, History, BookOpen, User, LogOut } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const navItems = [
@@ -8,7 +8,7 @@ const navItems = [
   { icon: BookOpen, label: "Guide", id: "guide", path: "/guide" },
 ];
 
-export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
+export default function Sidebar({ isOpen, onClose, user, onLogout }: { isOpen?: boolean; onClose?: () => void; user: string; onLogout: () => void }) {
   return (
     <>
       {/* Mobile Backdrop */}
@@ -43,18 +43,23 @@ export default function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose
         ))}
       </nav>
 
-      <div className="px-6 flex items-center gap-3 pt-6 border-t border-outline-variant/20">
-        <div className="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
-          <img
-            src="/avatar.jpg"
-            alt="User Profile"
-            className="w-full h-full object-cover"
-          />
+      <div className="px-6 flex items-center justify-between pt-6 border-t border-outline-variant/20">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+            <img
+              src="/avatar.jpg"
+              alt="User Profile"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <p className="text-xs font-semibold">{user}</p>
+            <p className="text-[10px] text-on-surface-variant">Pro Guardian</p>
+          </div>
         </div>
-        <div>
-          <p className="text-xs font-semibold">Alex Rivera</p>
-          <p className="text-[10px] text-on-surface-variant">Pro Guardian</p>
-        </div>
+        <button onClick={onLogout} className="text-on-surface-variant hover:text-error transition-colors p-2 rounded-lg hover:bg-error/10" title="Sign out">
+          <LogOut size={18} />
+        </button>
       </div>
     </aside>
     </>
