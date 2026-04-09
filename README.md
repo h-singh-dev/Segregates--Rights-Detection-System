@@ -22,7 +22,7 @@ To run this application locally, you will need two terminals running simultaneou
 **1. Setup Environment Variables**
 Create a `.env` file in your root folder:
 ```bash
-GEMINI_API_KEY="Your-Google-Gemini-Key-Here"
+GEMINI_API_KEY="AIzaSyCLy7RDkaFbEpGPojcmxQp_JIokoMsziL4"
 APP_URL="http://localhost:3000"
 ```
 
